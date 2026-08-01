@@ -97,16 +97,17 @@ def scene_intro():
     st.write("You are a small, anxious dog.")
     st.code(
         r"""
-              |\_/|
-              (. .)        /
-               \*/\_______/
-                \  _____ )
-                 ||     ||
-                 cc     cc""",
+        |\_/|
+        (. .)        /
+         \*/\_______/
+          \  _____ )
+           ||     ||
+           cc     cc""",
         language=None,
     )
     st.write("Even small, anxious dogs have to be brave sometimes.")
-    if st.button("Begin", type="primary"):
+    col1, col2 = st.columns(2)
+    if col2.button("Begin", type="primary"):
         go_to("start")
 
 
@@ -117,9 +118,9 @@ def scene_start():
         "street dog makes eye contact. He starts charging towards you."
     )
     col1, col2 = st.columns(2)
-    if st.button("Fight"):
+    if col2.button("Fight"):
         go_to("fight_end")
-    if st.button("Flight"):
+    if col2.button("Flight"):
         go_to("flight")
 
 
