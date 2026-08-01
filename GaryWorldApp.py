@@ -99,14 +99,8 @@ def go_to(scene_key, location_key=None):
 
 
 def centered_button(*args, **kwargs):
-    """Drop-in replacement for st.button that actually centers it.
-
-    CSS alone (display:flex + justify-content:center on the button's wrapper
-    div) doesn't reliably center a Streamlit button, because that wrapper div
-    usually hugs the button's own width rather than stretching to fill the
-    column -- so there's no extra space for "center" to distribute. Putting
-    the button inside spacer columns physically centers it in the layout
-    instead, which works regardless of Streamlit's internal DOM/CSS.
+    """Drop-in replacement for st.button, utting
+    the button inside spacer columns to physically center it in the layout, which works regardless of Streamlit's internal DOM/CSS.
     """
     left, mid, right = st.columns([1, 2, 1])
     with mid:
@@ -151,19 +145,9 @@ def show_scene_image(scene_key, width=None, caption=None, align="center"):
 # ************************************* Scenes *************************************
 
 def scene_intro():
-    show_scene_image("scene_intro", width=350, caption="Gary, before it all went sideways.")
     st.write("### Welcome to Gary's World.")
+    show_scene_image("scene_intro", width=350")
     st.write("You are a small, anxious dog.")
-    st.code(
-        r"""
-        |\_/|
-        (. .)        /
-         \*/\_______/
-          \  _____ )
-           ||     ||
-           cc     cc""",
-        language=None,
-    )
     st.write("Even small, anxious dogs have to be brave sometimes.")
     if centered_button("BEGIN ADVENTURE", type="primary"):
         go_to("start")
@@ -203,9 +187,9 @@ def scene_flight():
     st.write(
         "Oh, wait. You are accelerating upwards alarmingly fast. Even though the vet "
         "said you are overweight, you still are not heavy enough to balance this "
-        "airship."
+        "airship. Maybe there's something lying around that could help?"
     )
-    with st.expander("Check the airship inventory"):
+    with st.expander("Check the blimpventory"):
         for item, qty in st.session_state.blimp_inventory.items():
             st.write(f"- {item} (quantity: {qty})")
         st.caption(
