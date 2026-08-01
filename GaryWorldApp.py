@@ -1,19 +1,7 @@
 # Annalise Pasztor
-# COSC 3051 Final Project — Streamlit web version
-#
-# Streamlit reruns this whole script top-to-bottom on every interaction, and it has no
-# blocking input(). So the game is restructured as a state machine:
-#   - st.session_state holds everything that used to live on `self` (location, inventory,
-#     current scene).
-#   - Each old game-method becomes a `scene_...` function that draws that moment's text/
-#     image/map and shows buttons. Clicking a button updates st.session_state.scene and
-#     calls st.rerun(), which redraws the page as the new scene.
-#   - `SCENES` at the bottom just dispatches to whichever scene function matches the
-#     current state.
 
 import random
 import os
-
 import streamlit as st
 
 st.set_page_config(page_title="Gary's Adventure", page_icon="\U0001F43E", layout="wide")
@@ -21,9 +9,6 @@ st.set_page_config(page_title="Gary's Adventure", page_icon="\U0001F43E", layout
 IMAGE_DIR = os.path.join(os.path.dirname(__file__), "images")
 
 # ************************************* Locations *************************************
-# Same data as the original Location objects, just as a plain dict so it's easy to
-# look up by key from session_state.
-
 LOCATIONS = {
     "Park": {
         "name": "Park",
@@ -49,9 +34,8 @@ LOCATIONS = {
 
 # ************************************* Session state *************************************
 
-
 def init_state():
-    """Runs once per browser session (first load). Equivalent to GarysAdventure.__init__."""
+    """Runs once per browser session (first load)"""
     if "scene" not in st.session_state:
         reset_game()
 
@@ -94,72 +78,10 @@ def show_scene_image(scene_key):
             return
 
 
-# ************************************* Map corner *************************************
-# Shows a small prettymapp map centered on the player's current location, with a pin
-# marking the exact coordinates. prettymapp's get_aoi() buffers a circle *around* the
-# given coordinates, so the center of the resulting map is always the pin location —
-# we don't need to do any coordinate-system math to place the marker.
-
-
-@st.cache_data(show_spinner=False, ttl=3600)
-def _build_prettymapp_figure(coordinates, radius=350, style="Peach"):
-    from prettymapp.geo import get_aoi
-    from prettymapp.osm import get_osm_geometries
-    from prettymapp.plotting import Plot
-    from prettymapp.settings import STYLES
-
-    aoi = get_aoi(coordinates=coordinates, radius=radius, rectangular=False)
-    df = get_osm_geometries(aoi=aoi)
-    fig = Plot(df=df, aoi_bounds=aoi.bounds, draw_settings=STYLES[style]).plot_all()
-
-    ax = fig.axes[0]
-    xlim, ylim = ax.get_xlim(), ax.get_ylim()
-    center_x = (xlim[0] + xlim[1]) / 2
-    center_y = (ylim[0] + ylim[1]) / 2
-    ax.plot(center_x, center_y, marker="o", markersize=14, markerfacecolor="crimson",
-             markeredgecolor="white", markeredgewidth=2, zorder=99)
-    return fig
-
-
-def _build_fallback_figure(coordinates):
-    """Simple marker-only plot, used if prettymapp/OSM data can't be fetched
-    (e.g. no internet access to the Overpass API)."""
-    import matplotlib.pyplot as plt
-
-    lat, lon = coordinates
-    fig, ax = plt.subplots(figsize=(3, 3))
-    ax.scatter([lon], [lat], s=250, c="crimson", edgecolors="white", linewidths=2, zorder=5)
-    ax.set_xlim(lon - 0.01, lon + 0.01)
-    ax.set_ylim(lat - 0.01, lat + 0.01)
-    ax.set_facecolor("#eef3ea")
-    ax.set_xticks([])
-    ax.set_yticks([])
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    return fig
-
-
-def render_map():
-    loc = LOCATIONS[st.session_state.location]
-    st.caption(f"\U0001F4CD {loc['name']}")
-    try:
-        fig = _build_prettymapp_figure(loc["coordinates"])
-        st.pyplot(fig, use_container_width=True)
-    except Exception:
-        # No internet to OpenStreetMap's Overpass API, or a hiccup fetching data —
-        # fall back to a plain pin so the app never crashes.
-        fig = _build_fallback_figure(loc["coordinates"])
-        st.pyplot(fig, use_container_width=True)
-        st.caption("(map data unavailable — showing coordinates only)")
-
-
 # ************************************* Scenes *************************************
-# One function per "moment" in the game. Each shows narration + image + choices, and
-# each choice updates session_state and calls go_to() to move on.
-
 
 def scene_intro():
-    show_scene_image("intro")
+    show_scene_image("Intro")
     st.write("### Welcome to Gary's World.")
     st.write("You are a small, anxious dog.")
     st.code(
@@ -346,8 +268,7 @@ def scene_wind_dilemma():
 def scene_impale_end():
     show_scene_image("impale_end")
     st.error(
-        "Fiddlesticks. The winds have impaled your airship on the pink spires of "
-        "La Parroquía. Game over."
+        "Fiddlesticks. The winds have impaled your airship on the pink spires of La Parroquía. Game over."
     )
     show_restart_button()
 
@@ -355,8 +276,7 @@ def scene_impale_end():
 def scene_lasso_goose():
     show_scene_image("lasso_goose")
     st.write(
-        "Whoa there, cowboy! You have caught the lead goose! No easy feat. You now "
-        "seem to be taking a steep dive downwards."
+        "Whoa there, cowboy! You have caught the lead goose! No easy feat. You now seem to be taking a steep dive downwards."
     )
     st.write(
         "As you get closer to earth, you see where the geese are headed. It's a "
