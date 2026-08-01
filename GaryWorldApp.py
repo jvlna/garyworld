@@ -21,20 +21,20 @@ st.markdown(
     h1, h2, h3, p, .stMarkdown, .stCaption, .stAlert {
         text-align: center;
     }
-    .stButton {
+    .stButton, [data-testid="stButton"] {
         display: flex;
         justify-content: center;
     }
-    .stButton > button {
+    .stButton > button, [data-testid="stButton"] button {
         width: 100%;
         max-width: 420px;
     }
-    .stImage img {
+    .stImage img, [data-testid="stImage"] img {
         display: block;
         margin-left: auto;
         margin-right: auto;
     }
-    .stNumberInput, .stRadio {
+    .stNumberInput, .stRadio, [data-testid="stNumberInput"], [data-testid="stRadio"] {
         display: flex;
         justify-content: center;
     }
@@ -289,10 +289,9 @@ def scene_wind_dilemma():
         "Ah geez. If it's not one thing, it's another. The wind is picking up and "
         "this airship is getting hard to control."
     )
-    col1, col2 = st.columns(2)
-    if col1.button("1. Maybe now we should lasso that goose for steering help."):
+    if st.button("1. Maybe now we should lasso that goose for steering help."):
         go_to("lasso_goose", "ElGanso")
-    if col2.button("2. I trust the winds to take me where I am meant to be."):
+    if st.button("2. I trust the winds to take me where I am meant to be."):
         go_to("impale_end", "Parroquia")
 
 
@@ -314,10 +313,9 @@ def scene_lasso_goose():
         "massive structure looming over the city, curiously shaped like a goose. "
         "It seems the flock is returning home to the mothership."
     )
-    col1, col2 = st.columns(2)
-    if col1.button("1. Dock your airship at the beak of the giant goose structure."):
+    if st.button("1. Dock your airship at the beak of the giant goose structure."):
         go_to("goose_tower", "ElGanso")
-    if col2.button("2. Release the goose and try your luck with the carrots."):
+    if st.button("2. Release the goose and try your luck with the carrots."):
         st.write("You release the lead goose and head south.")
         go_to("carrot_fishing", "CarrotFarm")
 
@@ -398,12 +396,11 @@ def scene_good_evil():
         "You are now all-powerful. One final question remains. Will you remain "
         "pure of heart, or allow your power to corrupt you?"
     )
-    col1, col2 = st.columns(2)
-    if col1.button("1. Return the blimp to its rightful owner, the empanada vendor."):
+    if st.button("1. Return the blimp to its rightful owner, the empanada vendor."):
         st.session_state.player_inventory.append("***The Golden Chicharron Empanada***")
         st.session_state.ending = "good"
         go_to("game_won")
-    if col2.button("2. Keep everything for yourself. You've earned it."):
+    if st.button("2. Keep everything for yourself. You've earned it."):
         st.session_state.ending = "evil"
         go_to("game_won")
 
