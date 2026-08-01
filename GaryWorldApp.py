@@ -106,9 +106,9 @@ def scene_start():
         "street dog makes eye contact. He starts charging towards you."
     )
     col1, col2 = st.columns(2)
-    if col1.button("1. Fight"):
+    if col1.button("Fight"):
         go_to("fight_end")
-    if col2.button("2. Flight"):
+    if col1.button("Flight"):
         go_to("flight")
 
 
