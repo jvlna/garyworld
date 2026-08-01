@@ -98,6 +98,22 @@ def go_to(scene_key, location_key=None):
     st.rerun()
 
 
+def centered_button(*args, **kwargs):
+    """Drop-in replacement for st.button that actually centers it.
+
+    CSS alone (display:flex + justify-content:center on the button's wrapper
+    div) doesn't reliably center a Streamlit button, because that wrapper div
+    usually hugs the button's own width rather than stretching to fill the
+    column -- so there's no extra space for "center" to distribute. Putting
+    the button inside spacer columns physically centers it in the layout
+    instead, which works regardless of Streamlit's internal DOM/CSS.
+    """
+    left, mid, right = st.columns([1, 2, 1])
+    with mid:
+        kwargs.setdefault("use_container_width", True)
+        return st.button(*args, **kwargs)
+
+
 # ************************************* Images *************************************
 # Add an optional illustration for scene by dropping a file named
 # images/<scene_key>.png (or .jpg) into the images/ folder. If it's not there, the
@@ -129,7 +145,7 @@ def scene_intro():
         language=None,
     )
     st.write("Even small, anxious dogs have to be brave sometimes.")
-    if st.button("BEGIN ADVENTURE", type="primary"):
+    if centered_button("BEGIN ADVENTURE", type="primary"):
         go_to("start")
 
 
@@ -139,9 +155,9 @@ def scene_start():
         "Your daily neighborhood stroll has taken a turn for the worse when a large "
         "street dog makes eye contact. He starts charging towards you."
     )
-    if st.button("Fight"):
+    if centered_button("Fight"):
         go_to("fight_end")
-    if st.button("Flight"):
+    if centered_button("Flight"):
         go_to("flight")
 
 
@@ -181,11 +197,11 @@ def scene_flight():
         "Farm. To the east, a large flock of geese is flying in formation."
     )
     st.write("You consider your options:")
-    if st.button("1. Go south to lasso carrots for ballast."):
+    if centered_button("1. Go south to lasso carrots for ballast."):
         go_to("carrot_fishing", "CarrotFarm")
-    if st.button("2. Head east to lasso a goose."):
+    if centered_button("2. Head east to lasso a goose."):
         go_to("lasso_goose", "ElGanso")
-    if st.button("3. Take a cigarette break."):
+    if centered_button("3. Take a cigarette break."):
         roulette = random.randint(0, 2)
         if roulette == 1:
             go_to("smoke_explode")
@@ -221,9 +237,9 @@ def scene_carrot_fishing():
         "Your lasso technique was too good. The airship basket is overflowing with "
         "carrots and the airship starts to sink."
     )
-    if st.button("1. Jettison carrots overboard."):
+    if centered_button("1. Jettison carrots overboard."):
         go_to("carrot_throwing")
-    if st.button("2. Eat the carrots."):
+    if centered_button("2. Eat the carrots."):
         go_to("carrot_eat_end")
 
 
@@ -247,7 +263,7 @@ def scene_carrot_throwing():
         step=10,
         key="jettison_amount",
     )
-    if st.button("Toss them overboard", type="primary"):
+    if centered_button("Toss them overboard", type="primary"):
         new_amount = current - jettison
         st.session_state.blimp_inventory["Carrots"] = new_amount
         st.session_state.last_jettison = jettison
@@ -266,7 +282,7 @@ def scene_carrot_throwing_result():
     st.write(f"You now have {remaining} carrots.")
     if remaining > 300:
         st.warning("You are still sinking. Let's throw some more.")
-        if st.button("Keep throwing"):
+        if centered_button("Keep throwing"):
             go_to("carrot_throwing")
     elif remaining < 150:
         st.error(
@@ -279,7 +295,7 @@ def scene_carrot_throwing_result():
             "Nice! You have found the sweet spot of carrot ballast. The airship "
             "levels out."
         )
-        if st.button("Continue", type="primary"):
+        if centered_button("Continue", type="primary"):
             go_to("wind_dilemma")
 
 
@@ -289,9 +305,9 @@ def scene_wind_dilemma():
         "Ah geez. If it's not one thing, it's another. The wind is picking up and "
         "this airship is getting hard to control."
     )
-    if st.button("1. Maybe now we should lasso that goose for steering help."):
+    if centered_button("1. Maybe now we should lasso that goose for steering help."):
         go_to("lasso_goose", "ElGanso")
-    if st.button("2. I trust the winds to take me where I am meant to be."):
+    if centered_button("2. I trust the winds to take me where I am meant to be."):
         go_to("impale_end", "Parroquia")
 
 
@@ -313,9 +329,9 @@ def scene_lasso_goose():
         "massive structure looming over the city, curiously shaped like a goose. "
         "It seems the flock is returning home to the mothership."
     )
-    if st.button("1. Dock your airship at the beak of the giant goose structure."):
+    if centered_button("1. Dock your airship at the beak of the giant goose structure."):
         go_to("goose_tower", "ElGanso")
-    if st.button("2. Release the goose and try your luck with the carrots."):
+    if centered_button("2. Release the goose and try your luck with the carrots."):
         st.write("You release the lead goose and head south.")
         go_to("carrot_fishing", "CarrotFarm")
 
@@ -328,7 +344,7 @@ def scene_goose_tower():
     remaining_items = list(st.session_state.blimp_inventory.keys())
     if remaining_items and not st.session_state.get("item_taken"):
         choice = st.radio("You can take one item with you:", remaining_items)
-        if st.button("Take item"):
+        if centered_button("Take item"):
             st.session_state.player_inventory.append(choice)
             st.session_state.blimp_inventory.pop(choice)
             st.session_state.item_taken = True
@@ -350,7 +366,7 @@ def scene_goose_tower():
             "You look back. The goose has closed its beak. There's no way back "
             "out. Combat is your only option."
         )
-        if st.button("\U0001F3B2 Roll the 20-sided die", type="primary"):
+        if centered_button("\U0001F3B2 Roll the 20-sided die", type="primary"):
             combat = random.randint(1, 20)
             st.session_state.combat_roll = combat
             st.session_state.scene = "combat_result"
@@ -367,7 +383,7 @@ def scene_combat_result():
             "one big huff and puff you incinerate the wizard. The goose tower is "
             "now yours. 'Gary the Goose Lord' has a nice ring to it."
         )
-        if st.button("Continue", type="primary"):
+        if centered_button("Continue", type="primary"):
             go_to("good_evil")
     elif combat == 10 and has_can:
         st.write(
@@ -380,7 +396,7 @@ def scene_combat_result():
             "Victory is yours, and so is the tower! 'Gary the Goose Lord' has a "
             "nice ring to it."
         )
-        if st.button("Continue", type="primary"):
+        if centered_button("Continue", type="primary"):
             go_to("good_evil")
     else:
         st.error(
@@ -396,11 +412,11 @@ def scene_good_evil():
         "You are now all-powerful. One final question remains. Will you remain "
         "pure of heart, or allow your power to corrupt you?"
     )
-    if st.button("1. Return the blimp to its rightful owner, the empanada vendor."):
+    if centered_button("1. Return the blimp to its rightful owner, the empanada vendor."):
         st.session_state.player_inventory.append("***The Golden Chicharron Empanada***")
         st.session_state.ending = "good"
         go_to("game_won")
-    if st.button("2. Keep everything for yourself. You've earned it."):
+    if centered_button("2. Keep everything for yourself. You've earned it."):
         st.session_state.ending = "evil"
         go_to("game_won")
 
@@ -428,7 +444,7 @@ def scene_game_won():
 
 def show_restart_button():
     st.write("")
-    if st.button("\U0001F501 Start over"):
+    if centered_button("\U0001F501 Start over"):
         reset_game()
         st.rerun()
 
