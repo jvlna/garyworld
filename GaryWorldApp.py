@@ -201,11 +201,11 @@ def scene_flight():
         "Farm. To the east, a large flock of geese is flying in formation."
     )
     st.write("You consider your options:")
-    if centered_button("1. Go south to lasso carrots for ballast."):
+    if centered_button("Go south to lasso carrots for ballast."):
         go_to("carrot_fishing", "CarrotFarm")
-    if centered_button("2. Head east to lasso a goose."):
+    if centered_button("Head east to lasso a goose."):
         go_to("lasso_goose", "ElGanso")
-    if centered_button("3. Take a cigarette break."):
+    if centered_button("Take a cigarette break."):
         roulette = random.randint(0, 2)
         if roulette == 1:
             go_to("smoke_explode")
@@ -333,10 +333,10 @@ def scene_lasso_goose():
         "massive structure looming over the city, curiously shaped like a goose. "
         "It seems the flock is returning home to the mothership."
     )
-    if centered_button("1. Dock your airship at the beak of the giant goose structure."):
+    if centered_button("Dock your airship at the beak of the giant goose structure."):
         go_to("goose_tower", "ElGanso")
-    if centered_button("2. Release the goose and try your luck with the carrots."):
-        st.write("You release the lead goose and head south.")
+    if centered_button("Release the goose and try your luck with the carrots."):
+        st.write("You un-lasso the lead goose and head south.")
         go_to("carrot_fishing", "CarrotFarm")
 
 
@@ -416,11 +416,11 @@ def scene_good_evil():
         "You are now all-powerful. One final question remains. Will you remain "
         "pure of heart, or allow your power to corrupt you?"
     )
-    if centered_button("1. Return the blimp to its rightful owner, the empanada vendor."):
+    if centered_button("Return the blimp to its rightful owner, the empanada vendor."):
         st.session_state.player_inventory.append("***The Golden Chicharron Empanada***")
         st.session_state.ending = "good"
         go_to("game_won")
-    if centered_button("2. Keep everything for yourself. You've earned it."):
+    if centered_button("Keep everything for yourself. You've earned it."):
         st.session_state.ending = "evil"
         go_to("game_won")
 
