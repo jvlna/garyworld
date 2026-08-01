@@ -1,9 +1,5 @@
 /* style.css
    Styling for Gary's Adventure (Streamlit).
-   Streamlit left-aligns everything by default and, with layout="wide", lets
-   content stretch edge-to-edge. This file: (1) caps the content area's width
-   and centers *that block* on the page, and (2) centers text, images, and
-   buttons within it.
 */
 
 .block-container {
