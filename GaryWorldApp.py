@@ -455,11 +455,8 @@ SCENES = {
     "game_won": scene_game_won,
 }
 
-# ************************************* Main layout *************************************
+# ************************************* Main *************************************
 
 init_state()
 
-main_col = st.columns([2])
-
-with main_col:
-    SCENES[st.session_state.scene]()
+SCENES[st.session_state.scene]()
