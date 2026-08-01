@@ -10,37 +10,38 @@ IMAGE_DIR = os.path.join(os.path.dirname(__file__), "images")
 
 # ************************************* Style CSS *************************************
 
-.block-container {
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-}
- 
-h1, h2, h3, p, .stMarkdown, .stCaption, .stAlert {
-    text-align: center;
-}
- 
-.stButton {
-    display: flex;
-    justify-content: center;
-}
- 
-.stButton > button {
-    width: 100%;
-    max-width: 420px;
-}
- 
-.stImage img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
- 
-.stNumberInput, .stRadio {
-    display: flex;
-    justify-content: center;
-}
-
+st.markdown(
+    """
+    <style>
+    .block-container {
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    h1, h2, h3, p, .stMarkdown, .stCaption, .stAlert {
+        text-align: center;
+    }
+    .stButton {
+        display: flex;
+        justify-content: center;
+    }
+    .stButton > button {
+        width: 100%;
+        max-width: 420px;
+    }
+    .stImage img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .stNumberInput, .stRadio {
+        display: flex;
+        justify-content: center;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 # ************************************* Locations *************************************
 LOCATIONS = {
     "Park": {
