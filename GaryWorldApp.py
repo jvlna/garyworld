@@ -99,14 +99,7 @@ def go_to(scene_key, location_key=None):
 
 
 def centered_button(*args, **kwargs):
-    """Drop-in replacement for st.button that actually centers it.
-
-    CSS alone (display:flex + justify-content:center on the button's wrapper
-    div) doesn't reliably center a Streamlit button, because that wrapper div
-    usually hugs the button's own width rather than stretching to fill the
-    column -- so there's no extra space for "center" to distribute. Putting
-    the button inside spacer columns physically centers it in the layout
-    instead, which works regardless of Streamlit's internal DOM/CSS.
+    """Putting the button inside spacer columns to physically center it in the layout, which works regardless of Streamlit's internal DOM/CSS.
     """
     left, mid, right = st.columns([1, 2, 1])
     with mid:
@@ -120,12 +113,12 @@ def centered_button(*args, **kwargs):
 # scene just renders without one — nothing breaks.
 
 
-def show_scene_image(scene_key):
-    for ext in ("png", "jpg", "jpeg", "gif"):
-        path = os.path.join(IMAGE_DIR, f"{scene_key}.{ext}")
-        if os.path.exists(path):
-            st.image(path, use_container_width=True)
-            return
+#def show_scene_image(scene_key):
+#    for ext in ("png", "jpg", "jpeg", "gif"):
+#        path = os.path.join(IMAGE_DIR, f"{scene_key}.{ext}")
+#        if os.path.exists(path):
+#            st.image(path, use_container_width=True)
+#            return
 
 
 # ************************************* Scenes *************************************
@@ -133,17 +126,8 @@ def show_scene_image(scene_key):
 def scene_intro():
     show_scene_image("scene_intro")
     st.write("### Welcome to Gary's World.")
+    st.image(/image/scene_into.png, caption=None, width="content", use_column_width=None, clamp=False, channels="RGB", output_format="auto", *, use_container_width=None, link=None)
     st.write("You are a small, anxious dog.")
-    st.code(
-        r"""
-        |\_/|
-        (. .)        /
-         \*/\_______/
-          \  _____ )
-           ||     ||
-           cc     cc""",
-        language=None,
-    )
     st.write("Even small, anxious dogs have to be brave sometimes.")
     if centered_button("BEGIN ADVENTURE", type="primary"):
         go_to("start")
@@ -413,7 +397,7 @@ def scene_good_evil():
         "pure of heart, or allow your power to corrupt you?"
     )
     if centered_button("1. Return the blimp to its rightful owner, the empanada vendor."):
-        st.session_state.player_inventory.append("***The Golden Chicharron Empanada***")
+        st.session_state.player_inventory.append("***The Golden Empanada***")
         st.session_state.ending = "good"
         go_to("game_won")
     if centered_button("2. Keep everything for yourself. You've earned it."):
