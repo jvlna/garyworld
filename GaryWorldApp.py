@@ -241,9 +241,9 @@ def scene_carrot_fishing():
         "Your lasso technique was too good. The airship basket is overflowing with "
         "carrots and the airship starts to sink."
     )
-    if centered_button("1. Jettison carrots overboard."):
+    if centered_button("Jettison carrots overboard."):
         go_to("carrot_throwing")
-    if centered_button("2. Eat the carrots."):
+    if centered_button("Eat the carrots."):
         go_to("carrot_eat_end")
 
 
