@@ -106,8 +106,7 @@ def scene_intro():
         language=None,
     )
     st.write("Even small, anxious dogs have to be brave sometimes.")
-    col1, col2 = st.columns(2)
-    if col2.button("Begin", type="primary"):
+    if st.button("BEGIN ADVENTURE", type="primary"):
         go_to("start")
 
 
@@ -117,10 +116,9 @@ def scene_start():
         "Your daily neighborhood stroll has taken a turn for the worse when a large "
         "street dog makes eye contact. He starts charging towards you."
     )
-    col1, col2 = st.columns(2)
-    if col2.button("Fight"):
+    if st.button("Fight"):
         go_to("fight_end")
-    if col2.button("Flight"):
+    if st.button("Flight"):
         go_to("flight")
 
 
@@ -148,7 +146,7 @@ def scene_flight():
         "said you are overweight, you still are not heavy enough to balance this "
         "airship."
     )
-    with st.expander("\U0001F392 Check the airship inventory"):
+    with st.expander("Check the airship inventory"):
         for item, qty in st.session_state.blimp_inventory.items():
             st.write(f"- {item} (quantity: {qty})")
         st.caption(
@@ -160,12 +158,11 @@ def scene_flight():
         "Farm. To the east, a large flock of geese is flying in formation."
     )
     st.write("You consider your options:")
-    col1, col2, col3 = st.columns(3)
-    if col1.button("1. Go south to lasso carrots for ballast."):
+    if st.button("1. Go south to lasso carrots for ballast."):
         go_to("carrot_fishing", "CarrotFarm")
-    if col2.button("2. Head east to lasso a goose."):
+    if st.button("2. Head east to lasso a goose."):
         go_to("lasso_goose", "ElGanso")
-    if col3.button("3. Take a cigarette break."):
+    if st.button("3. Take a cigarette break."):
         roulette = random.randint(0, 2)
         if roulette == 1:
             go_to("smoke_explode")
@@ -201,10 +198,9 @@ def scene_carrot_fishing():
         "Your lasso technique was too good. The airship basket is overflowing with "
         "carrots and the airship starts to sink."
     )
-    col1, col2 = st.columns(2)
-    if col1.button("1. Jettison carrots overboard."):
+    if st.button("1. Jettison carrots overboard."):
         go_to("carrot_throwing")
-    if col2.button("2. Eat the carrots."):
+    if st.button("2. Eat the carrots."):
         go_to("carrot_eat_end")
 
 
