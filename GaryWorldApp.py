@@ -4,9 +4,20 @@ import random
 import os
 import streamlit as st
 
-st.set_page_config(layout="wide")
+st.set_page_config(page_title="Gary's Adventure", page_icon="\U0001F43E", layout="wide")
 
 IMAGE_DIR = os.path.join(os.path.dirname(__file__), "images")
+
+# ************************************* Load Style CSS *************************************
+def load_css(path):
+    """Injects an external stylesheet into the page. Streamlit has no native
+    'link a CSS file' option, so this reads the file and hands it to
+    st.markdown as a <style> block."""
+    css_path = os.path.join(os.path.dirname(__file__), path)
+    with open(css_path) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+load_css("style.css")
 
 # ************************************* Locations *************************************
 LOCATIONS = {
@@ -427,8 +438,6 @@ SCENES = {
 # ************************************* Main layout *************************************
 
 init_state()
-
-st.title("\U0001F43E Gary's Adventure")
 
 main_col, map_col = st.columns([3, 1])
 
