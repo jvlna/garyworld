@@ -8,16 +8,38 @@ st.set_page_config(page_title="Gary's Adventure", page_icon="\U0001F43E", layout
 
 IMAGE_DIR = os.path.join(os.path.dirname(__file__), "images")
 
-# ************************************* Load Style CSS *************************************
-def load_css(path):
-    """Injects an external stylesheet into the page. Streamlit has no native
-    'link a CSS file' option, so this reads the file and hands it to
-    st.markdown as a <style> block."""
-    css_path = os.path.join(os.path.dirname(__file__), path)
-    with open(css_path) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+# ************************************* Style CSS *************************************
 
-load_css("style.css")
+.block-container {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+ 
+h1, h2, h3, p, .stMarkdown, .stCaption, .stAlert {
+    text-align: center;
+}
+ 
+.stButton {
+    display: flex;
+    justify-content: center;
+}
+ 
+.stButton > button {
+    width: 100%;
+    max-width: 420px;
+}
+ 
+.stImage img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+ 
+.stNumberInput, .stRadio {
+    display: flex;
+    justify-content: center;
+}
 
 # ************************************* Locations *************************************
 LOCATIONS = {
