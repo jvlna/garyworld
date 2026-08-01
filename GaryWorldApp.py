@@ -459,7 +459,7 @@ SCENES = {
 
 init_state()
 
-main_col = st.columns([1, 3])
+main_col = st.columns([2])
 
 with main_col:
     SCENES[st.session_state.scene]()
