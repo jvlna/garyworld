@@ -431,7 +431,6 @@ init_state()
 st.title("\U0001F43E Gary's Adventure")
 
 main_col, map_col = st.columns([3, 1])
-with map_col:
-    render_map()
+
 with main_col:
     SCENES[st.session_state.scene]()
