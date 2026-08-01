@@ -4,7 +4,7 @@ import random
 import os
 import streamlit as st
 
-st.set_page_config(page_title="Gary's Adventure", page_icon="\U0001F43E", layout="wide")
+st.set_page_config(layout="wide")
 
 IMAGE_DIR = os.path.join(os.path.dirname(__file__), "images")
 
@@ -106,9 +106,9 @@ def scene_start():
         "street dog makes eye contact. He starts charging towards you."
     )
     col1, col2 = st.columns(2)
-    if col1.button("Fight"):
+    if st.button("Fight"):
         go_to("fight_end")
-    if col1.button("Flight"):
+    if st.button("Flight"):
         go_to("flight")
 
 
