@@ -131,7 +131,7 @@ def show_scene_image(scene_key):
 # ************************************* Scenes *************************************
 
 def scene_intro():
-    show_scene_image("Intro")
+    show_scene_image("scene_intro")
     st.write("### Welcome to Gary's World.")
     st.write("You are a small, anxious dog.")
     st.code(
