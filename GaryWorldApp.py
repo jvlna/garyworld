@@ -181,6 +181,7 @@ def scene_flight():
         "unattended. In a single jump, you grab the rope and use your elite "
         "tug-o-war skills to board the airship and break free."
     )
+    show_scene_image("scene_intro", width=350)
     st.write(
         "The thrashing open mouth of the belgian malinois is becoming smaller and "
         "smaller. Whew!"
