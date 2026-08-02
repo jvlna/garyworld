@@ -623,10 +623,20 @@ def show_menu_bar():
 
     with cols[0]:
         with st.popover("🐾 Personal Inventory", use_container_width=True):
+              if st.session_state.player_inventory:
+                for item in st.session_state.player_inventory:
+                    st.write(f"- {item}")
+            else:
+                st.caption("Empty so far.")
 
     if show_blimp:
         with cols[1]:
             with st.popover("🎈 Blimp Inventory", use_container_width=True):
+                  if st.session_state.blimp_inventory:
+                for item, qty in st.session_state.blimp_inventory.items():
+                    st.write(f"- {item} (quantity: {qty})")
+            else:
+                st.caption("Nothing left aboard.")
         map_col = cols[2]
     else:
         map_col = cols[1]
