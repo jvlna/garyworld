@@ -13,6 +13,7 @@ IMAGE_DIR = os.path.join(os.path.dirname(__file__), "images")
 st.markdown(
     """
     <style>
+
     .block-container {
         max-width: 1000px;
         margin-left: auto;
