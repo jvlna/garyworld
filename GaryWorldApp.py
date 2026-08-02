@@ -74,19 +74,31 @@ BLIMP_SCENES = {
 }
 
 # ************************************* Map *************************************
-# Uses Streamlit's built-in st.map -- it runs on pandas/pydeck, which install
-# automatically with `pip install streamlit`, so there's nothing extra to add
-# to requirements.txt and no ModuleNotFoundError risk. It's a simpler pin-on-a-
-# basemap view rather than a fully stylized street map, but it's zero-dependency.
-
+# Uses Streamlit's built-in st.map 
 
 def render_map():
     import pandas as pd
-
+    import pydeck as pdk
+ 
     loc = LOCATIONS[st.session_state.location]
-    st.caption(f"\U0001F4CD {loc['name']}")
     lat, lon = loc["coordinates"]
-    st.map(pd.DataFrame({"lat": [lat], "lon": [lon]}), zoom=13, size=60, color="#DC143C")
+    df = pd.DataFrame({"lat": [lat], "lon": [lon]})
+ 
+    layer = pdk.Layer(
+        "ScatterplotLayer",
+        data=df,
+        get_position=["lon", "lat"],
+        get_fill_color=[220, 20, 60],
+        get_radius=60,
+    )
+    view_state = pdk.ViewState(latitude=lat, longitude=lon, zoom=13)
+    deck = pdk.Deck(
+        layers=[layer],
+        initial_view_state=view_state,
+        map_style="light_no_labels",
+        tooltip=False,
+    )
+    st.pydeck_chart(deck)
 
 # ************************************* Session state *************************************
 
