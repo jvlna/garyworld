@@ -634,7 +634,7 @@ def show_menu_bar():
             with st.popover("🎈 Blimp Inventory", use_container_width=True):
                   if st.session_state.blimp_inventory:
                     for item, qty in st.session_state.blimp_inventory.items():
-                    st.write(f"- {item} (quantity: {qty})")
+                        st.write(f"- {item} (quantity: {qty})")
                   else:
                     st.caption("Nothing left aboard.")
         map_col = cols[2]
