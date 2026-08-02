@@ -91,7 +91,7 @@ def render_map():
         get_fill_color=[220, 20, 60],
         get_radius=60,
     )
-     label_layer = pdk.Layer(
+    label_layer = pdk.Layer(
         "TextLayer",
         data=df,
         get_position=["lon", "lat"],
