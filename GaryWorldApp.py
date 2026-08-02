@@ -4,7 +4,6 @@ import random
 import os
 import streamlit as st
 
-
 st.set_page_config(page_title="Gary's Adventure", page_icon="\U0001F43E", layout="wide")
 
 IMAGE_DIR = os.path.join(os.path.dirname(__file__), "images")
@@ -69,60 +68,19 @@ LOCATIONS = {
 }
 
 # ************************************* Map *************************************
-# Shows a small prettymapp map centered on the player's current location, with a
-# pin at the exact coordinates. prettymapp's get_aoi() buffers a circle *around*
-# the given coordinates, so the center of the resulting map is always the pin
-# location -- no coordinate-system math needed to place the marker.
-
-
-@st.cache_data(show_spinner=False, ttl=3600)
-def _build_prettymapp_figure(coordinates, radius=350, style="Peach"):
-    from prettymapp.geo import get_aoi
-    from prettymapp.osm import get_osm_geometries
-    from prettymapp.plotting import Plot
-    from prettymapp.settings import STYLES
-
-    aoi = get_aoi(coordinates=coordinates, radius=radius, rectangular=False)
-    df = get_osm_geometries(aoi=aoi)
-    fig = Plot(df=df, aoi_bounds=aoi.bounds, draw_settings=STYLES[style]).plot_all()
-
-    ax = fig.axes[0]
-    xlim, ylim = ax.get_xlim(), ax.get_ylim()
-    center_x = (xlim[0] + xlim[1]) / 2
-    center_y = (ylim[0] + ylim[1]) / 2
-    ax.plot(center_x, center_y, marker="o", markersize=14, markerfacecolor="crimson",
-             markeredgecolor="white", markeredgewidth=2, zorder=99)
-    return fig
-
-
-def _build_fallback_figure(coordinates):
-    """Simple marker-only plot, used if prettymapp/OSM data can't be fetched
-    (e.g. no internet access to the Overpass API)."""
-    import matplotlib.pyplot as plt
-
-    lat, lon = coordinates
-    fig, ax = plt.subplots(figsize=(3, 3))
-    ax.scatter([lon], [lat], s=250, c="crimson", edgecolors="white", linewidths=2, zorder=5)
-    ax.set_xlim(lon - 0.01, lon + 0.01)
-    ax.set_ylim(lat - 0.01, lat + 0.01)
-    ax.set_facecolor("#eef3ea")
-    ax.set_xticks([])
-    ax.set_yticks([])
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    return fig
+# Uses Streamlit's built-in st.map -- it runs on pandas/pydeck, which install
+# automatically with `pip install streamlit`, so there's nothing extra to add
+# to requirements.txt and no ModuleNotFoundError risk. It's a simpler pin-on-a-
+# basemap view rather than a fully stylized street map, but it's zero-dependency.
 
 
 def render_map():
+    import pandas as pd
+
     loc = LOCATIONS[st.session_state.location]
     st.caption(f"\U0001F4CD {loc['name']}")
-    try:
-        fig = _build_prettymapp_figure(loc["coordinates"])
-        st.pyplot(fig, use_container_width=True)
-    except Exception:
-        fig = _build_fallback_figure(loc["coordinates"])
-        st.pyplot(fig, use_container_width=True)
-        st.caption("(map data unavailable — showing coordinates only)")
+    lat, lon = loc["coordinates"]
+    st.map(pd.DataFrame({"lat": [lat], "lon": [lon]}), zoom=13, size=60, color="#DC143C")
 
 # ************************************* Session state *************************************
 
