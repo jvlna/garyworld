@@ -265,7 +265,7 @@ def scene_carrot_throwing():
         "How many carrots would you like to toss overboard?",
         min_value=0,
         max_value=current,
-        step=10,
+        step=20,
         key="jettison_amount",
     )
     if centered_button("Toss them overboard", type="primary"):
