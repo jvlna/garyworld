@@ -622,12 +622,12 @@ def show_menu_bar():
     cols = st.columns(3 if show_blimp else 2)
 
     with cols[0]:
-        with st.popover("🐾 Personal Inventory", use_container_width=True):
-              if st.session_state.player_inventory:
+        with st.popover("\U0001F43E Personal Inventory", use_container_width=True):
+            if st.session_state.player_inventory:
                 for item in st.session_state.player_inventory:
                     st.write(f"- {item}")
-                else:
-                    st.caption("Empty so far.")
+            else:
+                st.caption("Empty so far.")
 
     if show_blimp:
         with cols[1]:
