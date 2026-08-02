@@ -82,7 +82,7 @@ def render_map():
  
     loc = LOCATIONS[st.session_state.location]
     lat, lon = loc["coordinates"]
-    df = pd.DataFrame({"lat": [lat], "lon": [lon]})
+    df = pd.DataFrame({"lat": [lat], "lon": [lon], "name": [loc["name"]]})
  
     pin_layer = pdk.Layer(
         "ScatterplotLayer",
