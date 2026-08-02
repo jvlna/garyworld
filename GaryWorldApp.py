@@ -310,9 +310,9 @@ def scene_wind_dilemma():
         "Ah geez. If it's not one thing, it's another. The wind is picking up and "
         "this airship is getting hard to control."
     )
-    if centered_button("1. Maybe now we should lasso that goose for steering help."):
+    if centered_button("Maybe now we should lasso that goose for steering help."):
         go_to("lasso_goose", "ElGanso")
-    if centered_button("2. I trust the winds to take me where I am meant to be."):
+    if centered_button("I trust the winds to take me where I am meant to be."):
         go_to("impale_end", "Parroquia")
 
 
@@ -336,7 +336,7 @@ def scene_lasso_goose():
     )
     if centered_button("Dock your airship at the beak of the giant goose structure."):
         go_to("goose_tower", "ElGanso")
-    if centered_button("Release the goose and try your luck with the carrots."):
+    if centered_button("You've heard there's a madman living in the goose building. Release the goose and try your luck with the carrots."):
         st.write("You un-lasso the lead goose and head south.")
         go_to("carrot_fishing", "CarrotFarm")
 
