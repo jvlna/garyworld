@@ -637,5 +637,6 @@ def show_top_bar():
 
 init_state()
 
-show_top_bar()
+
 SCENES[st.session_state.scene]()
+show_top_bar()
