@@ -67,6 +67,12 @@ LOCATIONS = {
     },
 }
 
+BLIMP_SCENES = {
+    "flight", "smoke_explode", "carrot_fishing", "carrot_eat_end",
+    "carrot_throwing", "carrot_throwing_result", "wind_dilemma",
+    "lasso_goose", "goose_tower", "combat_result", "good_evil",
+}
+
 # ************************************* Map *************************************
 # Uses Streamlit's built-in st.map -- it runs on pandas/pydeck, which install
 # automatically with `pip install streamlit`, so there's nothing extra to add
@@ -605,31 +611,30 @@ SCENES = {
     "game_won": scene_game_won,
 }
 
-# ************************************* Top bar *************************************
+# ************************************* Menu bar *************************************
 # Quick-access popups for personal inventory, blimp inventory, and the map.
 # Hidden on the intro screen since there's nothing to show yet.
 
-
-def show_top_bar():
+def show_menu_bar():
     if st.session_state.scene == "intro":
         return
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        with st.popover("\U0001F43E Personal Inventory", use_container_width=True):
-            if st.session_state.player_inventory:
-                for item in st.session_state.player_inventory:
-                    st.write(f"- {item}")
-            else:
-                st.caption("Empty so far.")
-    with col2:
-        with st.popover("\U0001F388 Blimp Inventory", use_container_width=True):
-            if st.session_state.blimp_inventory:
-                for item, qty in st.session_state.blimp_inventory.items():
-                    st.write(f"- {item} (quantity: {qty})")
-            else:
-                st.caption("Nothing left aboard.")
-    with col3:
-        with st.popover("\U0001F5FA\uFE0F Map", use_container_width=True):
+    show_blimp = st.session_state.scene in BLIMP_SCENES
+    cols = st.columns(3 if show_blimp else 2)
+
+    with cols[0]:
+        with st.popover("🐾 Personal Inventory", use_container_width=True):
+            ...
+
+    if show_blimp:
+        with cols[1]:
+            with st.popover("🎈 Blimp Inventory", use_container_width=True):
+                ...
+        map_col = cols[2]
+    else:
+        map_col = cols[1]
+
+    with map_col:
+        with st.popover("🗺️ Map", use_container_width=True):
             render_map()
 
 
@@ -639,4 +644,4 @@ init_state()
 
 
 SCENES[st.session_state.scene]()
-show_top_bar()
+show_menu_bar()
