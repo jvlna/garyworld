@@ -96,7 +96,7 @@ def render_map():
         layers=[layer],
         initial_view_state=view_state,
         map_style="light_no_labels",
-        tooltip=False,
+        tooltip=True,
     )
     st.pydeck_chart(deck, width=350, height=350)
 
