@@ -98,7 +98,7 @@ def render_map():
         map_style="light_no_labels",
         tooltip=False,
     )
-    st.pydeck_chart(deck)
+    st.pydeck_chart(deck, width=350, height=350)
 
 # ************************************* Session state *************************************
 
