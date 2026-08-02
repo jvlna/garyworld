@@ -547,7 +547,6 @@ def scene_good_evil():
 
 def scene_game_won():
     show_scene_image("game_won")
-    st.balloons()
     st.success("Congratulations, you won!")
     if st.session_state.ending == "good":
         st.write(
@@ -565,15 +564,14 @@ def scene_game_won():
 
 
 def show_journey_summary():
-    """Equivalent to the original CLI's seePlayerLocations() + seePlayerInventory(),
-    shown at the end of every playthrough, win or lose."""
-    st.write("**\U0001F4CD Spots visited:**")
-    for loc in sorted(st.session_state.visited_locations):
-        st.write(f"- {loc}")
-    if st.session_state.player_inventory:
-        st.write("**\U0001F392 Inventory:**")
-        for item in st.session_state.player_inventory:
-            st.write(f"- {item}")
+    with st.expander("Show Journey Summary"):
+        st.write("**\U0001F4CD Spots visited:**")
+        for loc in sorted(st.session_state.visited_locations):
+            st.write(f"- {loc}")
+        if st.session_state.player_inventory:
+            st.write("**\U0001F392 Inventory:**")
+            for item in st.session_state.player_inventory:
+                st.write(f"- {item}")
 
 
 def show_restart_button():
