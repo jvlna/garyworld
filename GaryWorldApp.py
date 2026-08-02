@@ -3,8 +3,6 @@
 import random
 import os
 import streamlit as st
-from streamlit_folium import st_folium
-import folium
 from prettymapp.geo import get_aoi
 from prettymapp.osm import get_osm_geometries
 from prettymapp.plotting import Plot
