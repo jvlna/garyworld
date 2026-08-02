@@ -79,6 +79,11 @@ def reset_game():
     """Equivalent to GarysAdventure.start() / restart()."""
     st.session_state.scene = "intro"
     st.session_state.location = "Park"
+    # Mirrors the original Player.locations set: a de-duped record of every
+    # spot Gary has been, for seePlayerLocations(). start() in the original
+    # always sets currentLocation to Park first, so Park is visited from
+    # the get-go.
+    st.session_state.visited_locations = {"Park"}
     st.session_state.player_inventory = []
     st.session_state.blimp_inventory = {
         "Rope": 1,
@@ -89,6 +94,8 @@ def reset_game():
     st.session_state.item_taken = False
     st.session_state.combat_roll = None
     st.session_state.last_jettison = 0
+    st.session_state.wafers_eaten = 0
+    st.session_state.god_combat_roll = None
 
 
 def go_to(scene_key, location_key=None):
@@ -96,6 +103,7 @@ def go_to(scene_key, location_key=None):
     st.session_state.scene = scene_key
     if location_key:
         st.session_state.location = location_key
+        st.session_state.visited_locations.add(LOCATIONS[location_key]["name"])
     st.rerun()
 
 
@@ -314,15 +322,93 @@ def scene_wind_dilemma():
     if centered_button("Maybe now we should lasso that goose for steering help."):
         go_to("lasso_goose", "ElGanso")
     if centered_button("I trust the winds to take me where I am meant to be."):
-        go_to("impale_end", "Parroquia")
+        go_to("parroquia", "Parroquia")
 
 
-def scene_impale_end():
-    show_scene_image("impale_end")
-    st.error(
-        "Fiddlesticks. The winds have impaled your airship on the pink spires of La Parroquía. Game over."
+def scene_parroquia():
+    show_scene_image("parroquia")
+    st.write(
+        "Fiddlesticks. The winds have impaled your airship on the pink spires of "
+        "La Parroquía de San Miguel Arcángel."
     )
-    show_restart_button()
+    if centered_button("Sneak inside and disguise yourself as a priest."):
+        go_to("priest_gary")
+    if centered_button(
+        "\u201cWell, now that we're here at church, guess it's time to fight "
+        "God,\u201d your chihuahua ancestors whisper to you."
+    ):
+        go_to("fight_god")
+
+
+def scene_priest_gary():
+    show_scene_image("priest_gary")
+    st.write(
+        "You abandon your airship and climb into a window. After a short search, "
+        "you find a priest and yank his robe off. You are now Priest Gary."
+    )
+    st.write("You slip into the secret chambers and find a treat: communion wafers!")
+    wafers = st.number_input(
+        "How many would you like to eat?",
+        min_value=0,
+        step=1,
+        key="wafers_input",
+    )
+    if centered_button("Eat them", type="primary"):
+        st.session_state.wafers_eaten = wafers
+        st.session_state.scene = "priest_gary_result"
+        st.rerun()
+
+
+def scene_priest_gary_result():
+    show_scene_image("priest_gary_result")
+    wafers = st.session_state.get("wafers_eaten", 0)
+    if wafers > 20:
+        st.error(
+            "That was a lot of wafers, buddy. You fall asleep and are discovered "
+            "by the real priest. You are exiled for your crimes. Game over."
+        )
+        show_restart_button()
+    else:
+        st.write(
+            "You are feeling re-energized and infused with the holy spirit. It "
+            "is now time to fight God."
+        )
+        if centered_button("Continue", type="primary"):
+            go_to("fight_god")
+
+
+def scene_fight_god():
+    show_scene_image("fight_god")
+    st.write(
+        "You climb to the top of the church's tallest spire and yip your "
+        "loudest yap. A clap of thunder booms throughout the city in response. "
+        "The time has come to fight God."
+    )
+    if centered_button("\U0001F3B2 Roll the 20-sided die", type="primary"):
+        combat = random.randint(1, 20)
+        st.session_state.god_combat_roll = combat
+        st.session_state.scene = "fight_god_result"
+        st.rerun()
+
+
+def scene_fight_god_result():
+    show_scene_image("fight_god_result")
+    combat = st.session_state.get("god_combat_roll", 0)
+    if combat > 15:
+        st.write(
+            f"You rolled a {combat}. You leap into the air, and, trusting the "
+            "guidance of your ancestors, sink your little canines into the "
+            "heavenly ankle, God's one weakness. The sky turns purple. You have "
+            "killed God. You, Gary, are the new Ruler of the Universe."
+        )
+        if centered_button("Continue", type="primary"):
+            go_to("good_evil")
+    else:
+        st.error(
+            f"You rolled a {combat}. God sends down a lightning bolt and fries "
+            "you to a tiny little crisp. Game over."
+        )
+        show_restart_button()
 
 
 def scene_lasso_goose():
@@ -383,6 +469,9 @@ def scene_combat_result():
     show_scene_image("combat_result")
     combat = st.session_state.get("combat_roll", 0)
     has_can = any("can" in item.lower() for item in st.session_state.player_inventory)
+    has_marlboros = any(
+        "marlboro" in item.lower() for item in st.session_state.player_inventory
+    )
     if combat > 10:
         st.write(
             f"You rolled a {combat}. You are given firebreathing abilities and in "
@@ -404,6 +493,20 @@ def scene_combat_result():
         )
         if centered_button("Continue", type="primary"):
             go_to("good_evil")
+    elif combat == 10 and has_marlboros:
+        st.write(
+            "You have rolled a 10. You and the wizard are an equal match... but "
+            "you realize you have your pack of Marlboros with you."
+        )
+        st.write(
+            "You offer the wizard a smoke. She accepts, and confides in you that "
+            "she's quite tired of her current life. She's always dreamed of a "
+            "tower by the sea... She decides to go for it, and asks that you take "
+            "over her tower and duties here. 'Gary the Goose Lord' has a nice "
+            "ring to it."
+        )
+        if centered_button("Continue", type="primary"):
+            go_to("good_evil")
     else:
         st.error(
             f"You rolled a {combat}. The wizard has defeated you and stolen your "
@@ -419,7 +522,7 @@ def scene_good_evil():
         "pure of heart, or allow your power to corrupt you?"
     )
     if centered_button("Return the blimp to its rightful owner, the empanada vendor."):
-        st.session_state.player_inventory.append("***The Golden Chicharron Empanada***")
+        st.session_state.player_inventory.append("***The Golden Empanada***")
         st.session_state.ending = "good"
         go_to("game_won")
     if centered_button("Keep everything for yourself. You've earned it."):
@@ -443,12 +546,23 @@ def scene_game_won():
         )
     st.write("All in all, a pretty good day to be an anxious little dog.")
     st.write("*Courage is not the absence of fear, but the triumph over it.*")
-    if st.session_state.player_inventory:
-        st.write("**Inventory:**", ", ".join(st.session_state.player_inventory))
     show_restart_button()
 
 
+def show_journey_summary():
+    """Equivalent to the original CLI's seePlayerLocations() + seePlayerInventory(),
+    shown at the end of every playthrough, win or lose."""
+    st.write("**\U0001F4CD Spots visited:**")
+    for loc in sorted(st.session_state.visited_locations):
+        st.write(f"- {loc}")
+    if st.session_state.player_inventory:
+        st.write("**\U0001F392 Inventory:**")
+        for item in st.session_state.player_inventory:
+            st.write(f"- {item}")
+
+
 def show_restart_button():
+    show_journey_summary()
     st.write("")
     if centered_button("\U0001F501 Start over"):
         reset_game()
@@ -466,7 +580,11 @@ SCENES = {
     "carrot_throwing": scene_carrot_throwing,
     "carrot_throwing_result": scene_carrot_throwing_result,
     "wind_dilemma": scene_wind_dilemma,
-    "impale_end": scene_impale_end,
+    "parroquia": scene_parroquia,
+    "priest_gary": scene_priest_gary,
+    "priest_gary_result": scene_priest_gary_result,
+    "fight_god": scene_fight_god,
+    "fight_god_result": scene_fight_god_result,
     "lasso_goose": scene_lasso_goose,
     "goose_tower": scene_goose_tower,
     "combat_result": scene_combat_result,
