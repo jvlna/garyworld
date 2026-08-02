@@ -84,19 +84,30 @@ def render_map():
     lat, lon = loc["coordinates"]
     df = pd.DataFrame({"lat": [lat], "lon": [lon]})
  
-    layer = pdk.Layer(
+    pin_layer = pdk.Layer(
         "ScatterplotLayer",
         data=df,
         get_position=["lon", "lat"],
         get_fill_color=[220, 20, 60],
         get_radius=60,
     )
+     label_layer = pdk.Layer(
+        "TextLayer",
+        data=df,
+        get_position=["lon", "lat"],
+        get_text="name",
+        get_size=16,
+        get_color=[0, 0, 0],
+        get_pixel_offset=[0, -18],  # nudges the label above the pin
+        get_text_anchor='"middle"',
+        get_alignment_baseline='"bottom"',
+    )
     view_state = pdk.ViewState(latitude=lat, longitude=lon, zoom=13)
     deck = pdk.Deck(
-        layers=[layer],
+        layers=[pin_layer, label_layer],
         initial_view_state=view_state,
         map_style="light_no_labels",
-        tooltip=True,
+        tooltip=False,
     )
     st.pydeck_chart(deck, width=350, height=350)
 
