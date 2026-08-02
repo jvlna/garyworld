@@ -623,12 +623,10 @@ def show_menu_bar():
 
     with cols[0]:
         with st.popover("🐾 Personal Inventory", use_container_width=True):
-            ...
 
     if show_blimp:
         with cols[1]:
             with st.popover("🎈 Blimp Inventory", use_container_width=True):
-                ...
         map_col = cols[2]
     else:
         map_col = cols[1]
