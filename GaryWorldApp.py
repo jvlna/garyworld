@@ -239,7 +239,7 @@ def scene_flight():
         "smaller. Whew!"
     )
     st.write(
-        "Let's take a sniff around, eh?"
+        "Let's take a sniff around, shall we?"
     )
     with st.expander("Check the blimpventory"):
         for item, qty in st.session_state.blimp_inventory.items():
