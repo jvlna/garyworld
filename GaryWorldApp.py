@@ -239,9 +239,7 @@ def scene_flight():
         "smaller. Whew!"
     )
     st.write(
-        "Oh, wait. You are accelerating upwards alarmingly fast. Even though the vet "
-        "said you are overweight, you still are not heavy enough to balance this "
-        "airship. Maybe there's something lying around that could help?"
+        "Let's take a sniff around, eh?"
     )
     with st.expander("Check the blimpventory"):
         for item, qty in st.session_state.blimp_inventory.items():
@@ -263,7 +261,8 @@ def scene_flight():
         go_to("blimp")
 
 def scene_blimp():
-    st.write("Your airship is still climbing steadily upwards.")
+    st.write("Oh, geez. You reached a nice cruising altitude but the airship is still climbing. You start accelerating upwards alarmingly fast."
+        "Even though the vet said you are overweight, you still are not heavy enough to balance this airship.")
     st.write("You consider your options:")
     if centered_button("Go south to lasso carrots for ballast."):
         go_to("carrot_fishing", "CarrotFarm")
