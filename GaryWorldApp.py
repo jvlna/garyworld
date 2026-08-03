@@ -254,12 +254,13 @@ def scene_flight():
         "You scan the horizon. To the south is farmland, namely, Don Toño's Carrot "
         "Farm. To the east, a large flock of geese is flying in formation."
     )
+    with st.expander("\U0001F5FA\uFE0F Map", expanded=True):
+            render_map()
     st.write(
         "Access your inventory and map at any time during the game by expanding the menu in the top left corner."
     )
-    with st.expander("\U0001F5FA\uFE0F Map", expanded=True):
-            render_map()
-    go_to("blimp")
+    if centered_button("NEXT", type="primary"):
+        go_to("blimp")
 
 def scene_blimp():
     st.write("You consider your options:")
