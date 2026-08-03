@@ -233,7 +233,7 @@ def scene_flight():
         "unattended. In a single jump, you grab the rope and use your elite "
         "tug-o-war skills to board the airship and break free."
     )
-    show_scene_image("scene_intro", width=350)
+    show_scene_image("scene_blimp", width=350)
     st.write(
         "The thrashing open mouth of the belgian malinois is becoming smaller and "
         "smaller. Whew!"
@@ -254,7 +254,7 @@ def scene_flight():
         "You scan the horizon. To the south is farmland, namely, Don Toño's Carrot "
         "Farm. To the east, a large flock of geese is flying in formation."
     )
-    with st.expander("\U0001F5FA\uFE0F Map", expanded=True):
+    with st.expander("\U0001F5FA\uFE0F Map"):
             render_map()
     st.write(
         "Access your inventory and map at any time during the game by expanding the menu in the top left corner."
@@ -263,6 +263,7 @@ def scene_flight():
         go_to("blimp")
 
 def scene_blimp():
+    st.write("Your airship is still climbing steadily upwards.")
     st.write("You consider your options:")
     if centered_button("Go south to lasso carrots for ballast."):
         go_to("carrot_fishing", "CarrotFarm")
