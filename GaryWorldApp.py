@@ -199,7 +199,7 @@ def show_scene_image(scene_key, width=None, caption=None, align="center"):
 
 def scene_intro():
     st.write("### Welcome to Gary's World.")
-    show_scene_image("scene_intro", width=350)
+    show_scene_image("scene_intro", width=150)
     st.write("You are a small, anxious dog.")
     st.write("Even small, anxious dogs have to be brave sometimes.")
     if centered_button("BEGIN ADVENTURE", type="primary"):
