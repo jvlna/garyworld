@@ -68,7 +68,7 @@ LOCATIONS = {
 }
 
 BLIMP_SCENES = {
-    "flight", "smoke_explode", "carrot_fishing", "carrot_eat_end",
+    "flight", "blimp", "smoke_explode", "carrot_fishing", "carrot_eat_end",
     "carrot_throwing", "carrot_throwing_result", "wind_dilemma",
     "lasso_goose", "goose_tower", "combat_result", "good_evil",
 }
@@ -259,6 +259,9 @@ def scene_flight():
     )
     with st.expander("\U0001F5FA\uFE0F Map", expanded=True):
             render_map()
+    go_to("blimp")
+
+def scene_blimp():
     st.write("You consider your options:")
     if centered_button("Go south to lasso carrots for ballast."):
         go_to("carrot_fishing", "CarrotFarm")
@@ -621,6 +624,7 @@ SCENES = {
     "start": scene_start,
     "fight_end": scene_fight_end,
     "flight": scene_flight,
+    "blimp": scene_blimp,
     "smoke_explode": scene_smoke_explode,
     "carrot_fishing": scene_carrot_fishing,
     "carrot_eat_end": scene_carrot_eat_end,
