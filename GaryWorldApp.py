@@ -254,6 +254,11 @@ def scene_flight():
         "You scan the horizon. To the south is farmland, namely, Don Toño's Carrot "
         "Farm. To the east, a large flock of geese is flying in formation."
     )
+    st.write(
+        "Access your inventory and map at any time during the game by expanding the menu in the top left corner."
+    )
+    with st.expander("\U0001F5FA\uFE0F Map", expanded=True):
+            render_map()
     st.write("You consider your options:")
     if centered_button("Go south to lasso carrots for ballast."):
         go_to("carrot_fishing", "CarrotFarm")
@@ -641,8 +646,9 @@ SCENES = {
 def show_sidebar():
     if st.session_state.scene == "intro":
         return
+        
     with st.sidebar:
-        st.header("\U0001F43E Gary's Journey")
+        st.header("\U0001F43E Gary Menu")
         with st.expander("\U0001F43E Personal Inventory"):
             if st.session_state.player_inventory:
                 for item in st.session_state.player_inventory:
@@ -650,7 +656,7 @@ def show_sidebar():
             else:
                 st.caption("Empty so far.")
         with st.expander("\U0001F388 Blimp Inventory"):
-            if st.session_state.blimp_inventory:
+            if st.session_state.blimp_inventory in BLIMP_SCENES:
                 for item, qty in st.session_state.blimp_inventory.items():
                     st.write(f"- {item} (quantity: {qty})")
             else:
