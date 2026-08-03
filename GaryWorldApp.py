@@ -199,7 +199,7 @@ def show_scene_image(scene_key, width=None, caption=None, align="center"):
 
 def scene_intro():
     st.write("### Welcome to Gary's World.")
-    show_scene_image("scene_intro", width=150)
+    show_scene_image("scene_intro", width=150, align="center")
     st.write("You are a small, anxious dog.")
     st.write("Even small, anxious dogs have to be brave sometimes.")
     if centered_button("BEGIN ADVENTURE", type="primary"):
@@ -659,12 +659,13 @@ def show_sidebar():
                     st.write(f"- {item}")
             else:
                 st.caption("Empty so far.")
-        with st.expander("\U0001F388 Blimp Inventory"):
-            if st.session_state.blimp_inventory in BLIMP_SCENES:
-                for item, qty in st.session_state.blimp_inventory.items():
-                    st.write(f"- {item} (quantity: {qty})")
-            else:
-                st.caption("Nothing left aboard.")
+        if st.session_state.scene in BLIMP_SCENES:
+            with st.expander("\U0001F388 Blimp Inventory"):
+                if st.session_state.blimp_inventory:
+                    for item, qty in st.session_state.blimp_inventory.items():
+                        st.write(f"- {item} (quantity: {qty})")
+                else:
+                    st.caption("Nothing left aboard.")
         with st.expander("\U0001F5FA\uFE0F Map", expanded=True):
             render_map()
 
