@@ -109,7 +109,7 @@ def render_map():
         map_style="light_no_labels",
         tooltip=False,
     )
-    st.pydeck_chart(deck, width=350, height=350)
+    st.pydeck_chart(deck, width=250, height=250)
 
 # ************************************* Session state *************************************
 
@@ -638,41 +638,30 @@ SCENES = {
 # Quick-access popups for personal inventory, blimp inventory, and the map.
 # Hidden on the intro screen since there's nothing to show yet.
 
-def show_menu_bar():
+def show_sidebar():
     if st.session_state.scene == "intro":
         return
-    show_blimp = st.session_state.scene in BLIMP_SCENES
-    cols = st.columns(3 if show_blimp else 2)
-
-    with cols[0]:
-        with st.popover("\U0001F43E Personal Inventory", use_container_width=True):
+    with st.sidebar:
+        st.header("\U0001F43E Gary's Journey")
+        with st.expander("\U0001F43E Personal Inventory"):
             if st.session_state.player_inventory:
                 for item in st.session_state.player_inventory:
                     st.write(f"- {item}")
             else:
                 st.caption("Empty so far.")
-
-    if show_blimp:
-        with cols[1]:
-            with st.popover("🎈 Blimp Inventory", use_container_width=True):
-                  if st.session_state.blimp_inventory:
-                    for item, qty in st.session_state.blimp_inventory.items():
-                        st.write(f"- {item} (quantity: {qty})")
-                  else:
-                    st.caption("Nothing left aboard.")
-        map_col = cols[2]
-    else:
-        map_col = cols[1]
-
-    with map_col:
-        with st.popover("🗺️ Map", use_container_width=True):
+        with st.expander("\U0001F388 Blimp Inventory"):
+            if st.session_state.blimp_inventory:
+                for item, qty in st.session_state.blimp_inventory.items():
+                    st.write(f"- {item} (quantity: {qty})")
+            else:
+                st.caption("Nothing left aboard.")
+        with st.expander("\U0001F5FA\uFE0F Map", expanded=True):
             render_map()
-
 
 # ************************************* Main *************************************
 
 init_state()
 
-
+show_sidebar()
 SCENES[st.session_state.scene]()
-show_menu_bar()
+
